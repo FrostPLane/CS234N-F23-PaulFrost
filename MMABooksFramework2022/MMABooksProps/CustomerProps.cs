@@ -11,18 +11,18 @@ using System.Text.Json.Serialization;
 
 namespace MMABooksProps
 {
+    [Serializable()]
     public class CustomerProps : IBaseProps
     {
         #region Auto-implemented Properties
-        public int CustomerID { get; set; }
+        public int CustomerID { get; set; } = 0;
         public string Name { get; set; } = "";
         public string Address { get; set; } = "";
         public string City { get; set; } = "";
         public string State { get; set; } = "";
-        public int ZipCode { get; set; }
-        /// <summary>
+        public string ZipCode { get; set; } = "";
+
         /// ConcurrencyID. Don't manipulate directly.
-        /// </summary>
         public int ConcurrencyID { get; set; } = 0;
         #endregion
         public object Clone()
@@ -65,7 +65,7 @@ namespace MMABooksProps
             this.Address = (string)dr["Address"];
             this.City = (string)dr["City"];
             this.State = (string)dr["State"];
-            this.ZipCode = (int)dr["ZipCode"];
+            this.ZipCode = (string)dr["ZipCode"];
 
             this.ConcurrencyID = (Int32)dr["ConcurrencyID"];
         }

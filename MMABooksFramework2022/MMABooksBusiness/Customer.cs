@@ -12,11 +12,6 @@ namespace MMABooksBusiness
 {
     public class Customer : BaseBusiness
     {
-        /// <summary>
-        /// Read/Write property. 
-        /// </summary>
-        //  Notice that I used a name for the business object property that I thought would be more intuitive for the 
-        //  application programmer.  It doesn't have to match the database.
         public int CustomerID
         {
             get
@@ -114,7 +109,7 @@ namespace MMABooksBusiness
             {
                 if (!(value == ((CustomerProps)mProps).State))
                 {
-                    if (value.Trim().Length >= 1 && value.Trim().Length <= 12)
+                    if (value.Trim().Length == 2)
                     {
                         mRules.RuleBroken("State", false);
                         ((CustomerProps)mProps).State = value;
@@ -123,13 +118,13 @@ namespace MMABooksBusiness
 
                     else
                     {
-                        throw new ArgumentOutOfRangeException("State must be no more than 12 characters long.");
+                        throw new ArgumentOutOfRangeException("State must be no more than 2 characters long.");
                     }
                 }
             }
         }
 
-        public int ZipCode
+        public String ZipCode
         {
             get
             {
@@ -140,7 +135,7 @@ namespace MMABooksBusiness
             {
                 if (!(value == ((CustomerProps)mProps).ZipCode))
                 {
-                    if (value.ToString().Length >= 1 && value.ToString().Length <= 10)
+                    if (value.Trim().Length >= 1 && value.Trim().Length <= 15)
                     {
                         mRules.RuleBroken("ZipCode", false);
                         ((CustomerProps)mProps).ZipCode = value;
@@ -149,7 +144,7 @@ namespace MMABooksBusiness
 
                     else
                     {
-                        throw new ArgumentOutOfRangeException("ZipCode must be no more than 10 digits long.");
+                        throw new ArgumentOutOfRangeException("ZipCode must be no more than 15 characters long.");
                     }
                 }
             }
@@ -175,9 +170,6 @@ namespace MMABooksBusiness
         {
         }
 
-        /// <summary>
-        /// Sets required fields for a record.
-        /// </summary>
         protected override void SetRequiredRules()
         {
             mRules.RuleBroken("CustomerID", true);
@@ -188,10 +180,6 @@ namespace MMABooksBusiness
             mRules.RuleBroken("ZipCode", true);
         }
 
-        /// <summary>
-        /// Instantiates mProps and mOldProps as new Props objects.
-        /// Instantiates mbdReadable and mdbWriteable as new DB objects.
-        /// </summary>
         protected override void SetUp()
         {
             mProps = new CustomerProps();
@@ -200,21 +188,12 @@ namespace MMABooksBusiness
             mdbReadable = new CustomerDB();
             mdbWriteable = new CustomerDB();
         }
-        /// <summary>
-        /// Default constructor - gets the connection string - assumes a new record that is not in the database.
-        /// </summary>
+
         public Customer() : base()
         {
         }
 
-/*        /// <summary>
-        /// Calls methods SetUp() and Load().
-        /// Use this constructor when the object is in the database AND the connection string is in a config file
-        /// </summary>
-        /// <param name="key">ID number of a record in the database.
-        /// Sent as an arg to Load() to set values of record to properties of an 
-        /// object.</param>*/
-        public Customer(string key)
+        public Customer(int key)
             : base(key)
         {
         }

@@ -1,8 +1,8 @@
 DROP PROCEDURE IF EXISTS usp_CustomerDelete;
 DELIMITER // 
-CREATE PROCEDURE usp_CustomerDelete (in customerid varchar(2), in conCurrId int)
+CREATE PROCEDURE usp_CustomerDelete (in custId int, in conCurrId int)
 BEGIN
-	Delete from customers where CustomerID = customerid and ConcurrencyID = conCurrId;
+	Delete from customers where CustomerID = custId and ConcurrencyID = conCurrId;
 END //
 DELIMITER ; 
 
@@ -10,7 +10,7 @@ DROP PROCEDURE IF EXISTS usp_CustomerSelect;
 DELIMITER // 
 CREATE PROCEDURE usp_CustomerSelect (in custId int)
 BEGIN
-	Select * from customers where CustomerID=custId;
+	Select * from customers where CustomerID = custId;
 END //
 DELIMITER ;
 

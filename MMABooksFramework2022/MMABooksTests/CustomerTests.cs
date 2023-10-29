@@ -31,8 +31,8 @@ namespace MMABooksTests
         {
             // not in Data Store - no code
             Customer c = new Customer();
-            Assert.AreEqual(string.Empty, c.CustomerID);
             Assert.AreEqual(string.Empty, c.Name);
+            Assert.AreEqual(string.Empty, c.Address);
             Assert.IsTrue(c.IsNew);
             Assert.IsFalse(c.IsValid);
         }
@@ -42,14 +42,10 @@ namespace MMABooksTests
         public void TestRetrieveFromDataStoreContructor()
         {
             // retrieves from Data Store
-            Customer c = new Customer();
-            c.Name = "testName";
-            c.Address = "testAddress 5";
-            c.City = "testCity";
-            c.State = "testState";
-            c.ZipCode = 12345;
-            Assert.AreEqual(999, c.CustomerID);
-            Assert.IsTrue(c.Name.Length > 0);
+            Customer c = new Customer(1);
+
+            Assert.AreEqual("Molunguri, A", c.Name);
+            Assert.AreEqual("1108 Johanna Bay Drive", c.Address);
             Assert.IsFalse(c.IsNew);
             Assert.IsTrue(c.IsValid);
         }
@@ -58,14 +54,13 @@ namespace MMABooksTests
         public void TestSaveToDataStore()
         {
             Customer c = new Customer();
-            c.Name = "testName";
-            c.Address = "testAddress 5";
-            c.City = "testCity";
-            c.State = "testState";
-            c.ZipCode = 12345;
+            c.Name = "Minnie Mouse";
+            c.Address = "101 Main Street";
+            c.City = "Orlando";
+            c.State = "FL";
+            c.ZipCode = "10001";
             c.Save();
-            Customer c2 = new Customer();
-            c2.Name = "testName";
+            Customer c2 = new Customer(c.CustomerID);
             Assert.AreEqual(c2.Address, c.Address);
             Assert.AreEqual(c2.Name, c.Name);
         }
@@ -78,7 +73,7 @@ namespace MMABooksTests
             c.Address = "testAddress 5";
             c.City = "testCity";
             c.State = "testState";
-            c.ZipCode = 12345;
+            c.ZipCode = "12345";
             c.Save();
 
             Customer c2 = new Customer();
@@ -90,28 +85,18 @@ namespace MMABooksTests
         [Test]
         public void TestDelete()
         {
-            Customer c = new Customer();
-            c.Name = "testName";
-            c.Address = "testAddress 5";
-            c.City = "testCity";
-            c.State = "testState";
-            c.ZipCode = 12345;
+            Customer c = new Customer(1);
             c.Delete();
             c.Save();
-            Assert.Throws<Exception>(() => new Customer("20"));
+            Assert.Throws<Exception>(() => new Customer(1));
         }
 
         [Test]
         public void TestGetList()
         {
-            Customer c = new Customer();
-            c.Name = "testName";
-            c.Address = "testAddress 5";
-            c.City = "testCity";
-            c.State = "testState";
-            c.ZipCode = 12345;
+            Customer c = new Customer(1);
             List<Customer> customers = (List<Customer>)c.GetList();
-            Assert.AreEqual(699, customers.Count);
+            Assert.AreEqual(696, customers.Count);
             Assert.AreEqual("Mills, Richard", customers[0].Name);
             Assert.AreEqual(999, customers[0].CustomerID);
         }
@@ -135,15 +120,15 @@ namespace MMABooksTests
         [Test]
         public void TestInvalidPropertySet()
         {
-            Customer c = new Customer();
+            Customer c = new Customer(1);
             Assert.Throws<ArgumentOutOfRangeException>(() => c.Address = "");
         }
 
         [Test]
         public void TestConcurrencyIssue()
         {
-            Customer c1 = new Customer("testName");
-            Customer c2 = new Customer("testName");
+            Customer c1 = new Customer(1);
+            Customer c2 = new Customer(2);
 
             c1.Name = "Updated first";
             c1.Save();
